@@ -28,7 +28,6 @@ func GetPeople(w http.ResponseWriter, req *http.Request) {
 	}
 	w.Write(bs)
 }
-
 func GetAllCars(w http.ResponseWriter, req *http.Request) {
 	rs, err := db.GetAllCars()
 	if err != nil {
@@ -62,7 +61,6 @@ func GetPerson(w http.ResponseWriter, req *http.Request) {
 
 	w.Write(bs)
 }
-
 func GetCar(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id := vars["id"]
@@ -84,34 +82,66 @@ func GetCar(w http.ResponseWriter, req *http.Request) {
 
 //CreateItem saves an item (form data) into the database.
 func CreatePerson(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("Create Person"))
-	//ID := req.FormValue("id")
-	//valueStr := req.FormValue("value")
-	//value, err := strconv.Atoi(valueStr)
-	//if err != nil {
-	//	handleError(err, "Failed to parse input data: %v", w)
-	//	return
-	//}
-	//
-	//car := db.Cars{Id: ""}
-
-	//if err = db.CreateCar(car); err != nil {
-	//	handleError(err, "Failed to save data: %v", w)
-	//	return
-	//}
-	//
-	//w.Write([]byte("OK"))
+	w.Write([]byte("OK"))
 }
+
 func CreateCar(w http.ResponseWriter, req *http.Request){
-	w.Write([]byte("Create Car"))
+	//w.Write([]byte("Create Car"))
+	//rs, err := db.CreateCar()
+	//if err != nil {
+	//	handleError(err, "Failed to load database items: %v", w)
+	//	return
+	//}
+	//
+	//bs, err := json.Marshal(rs)
+	//if err != nil {
+	//	handleError(err, "Failed to load marshal data: %v", w)
+	//	return
+	//}
+	//w.Write(bs)
 }
 
 func UpdatePerson(w http.ResponseWriter, req *http.Request){
-	w.Write([]byte("Update Person"))
+	vars := mux.Vars(req)
+	id := vars["id"]
+	if id == "" {
+		http.Error(w, http.StatusText(500), 500)
+	}
+
+	rs, err := db.UpdateOnePerson(id)
+	if err != nil {
+		handleError(err, "Failed to read database: %v", w)
+		return
+	}
+
+	bs, err := json.Marshal(rs)
+	if err != nil {
+		handleError(err, "Failed to marshal data: %v", w)
+		return
+	}
+
+	w.Write(bs)
 }
 
 func UpdateCar(w http.ResponseWriter, req *http.Request){
-	w.Write([]byte("Update Car"))
+	vars := mux.Vars(req)
+	id := vars["id"]
+	if id == "" {
+		http.Error(w, http.StatusText(500), 500)
+	}
+	rs, err := db.UpdateOneCar(id)
+	if err != nil {
+		handleError(err, "Failed to read database: %v", w)
+		return
+	}
+
+	bs, err := json.Marshal(rs)
+	if err != nil {
+		handleError(err, "Failed to marshal data: %v", w)
+		return
+	}
+	w.Write(bs)
+
 }
 
 // DeleteItem removes a single item (identified by parameter) from the database.
@@ -126,8 +156,6 @@ func DeletePerson(w http.ResponseWriter, req *http.Request) {
 
 	w.Write([]byte("OK"))
 }
-
-
 func DeleteCar(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id := vars["id"]

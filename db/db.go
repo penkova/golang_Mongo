@@ -71,10 +71,8 @@ func GetOneCar(id string) (*Cars, error) {
 	}
 	return &res, nil
 }
-
 func GetOnePerson(id string) (*People, error) {
 	res := People{}
-	//err := peopleColl.FindId(bson.ObjectIdHex(id)).One(&person)
 	fmt.Println(id)
 
 	if err := collectionPerson().FindId(bson.ObjectIdHex(id)).One(&res); err != nil {
@@ -84,16 +82,54 @@ func GetOnePerson(id string) (*People, error) {
 	return &res, nil
 }
 
-// Save inserts an item to the database.
-func CreateCar(item Cars) error {
+// Create    inserts an item to the database.
+func CreateOnePerson(item People) error {
+	return collectionPerson().Insert(item)
+}
+func CreateOneCar(item Cars) error{
 	return collectionCars().Insert(item)
+}
+
+//Update
+func UpdateOnePerson(id string) (*People, error) {
+	res := People{}
+
+	if err := collectionPerson().Update(bson.M{"_id": bson.ObjectIdHex(id)}, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+func UpdateOneCar(id string) (*Cars, error) {
+	res := Cars{}
+	fmt.Println(id)
+
+	//if err := collectionPerson().Update(bson.M{"_id": bson.ObjectIdHex(id)}, &res); err != nil {
+	//	return nil, err
+	//}
+
+	if err := collectionCars().Update(bson.M{
+		"_id": bson.ObjectIdHex(id),
+		},
+		/*bson.M{
+			"$set": bson.M{
+				"model":  res.Model,
+				"age":   res.Age,
+				"price": res.Price,
+			}}*/
+
+			&res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
 }
 
 // Remove deletes an item from the database
 func RemovePerson(id string) error {
 	return collectionPerson().Remove(bson.M{"_id": bson.ObjectIdHex(id)})
 }
-
 func RemoveCar(id string) error {
 	return collectionCars().Remove(bson.M{"_id": bson.ObjectIdHex(id)})
 }
