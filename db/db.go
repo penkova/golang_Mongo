@@ -2,26 +2,23 @@ package db
 
 import (
 	"log"
+	"fmt"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-//Item represents a sample database entity.
-//type Item struct {
-//	ID    string `json:"id" bson:"_id,omitempty"`
-//	Value int    `json:"value"`
-//}
-
 type People struct{
-	_id bson.ObjectId 		`json:"id" bson:"_id"`
+	Id bson.ObjectId 		`json:"id" bson:"_id"`
 	Name string 			`json:"name" bson:"name"`
 	Age int 				`json:"age" bson:"age"`
 	//car []Cars
+	// id = car_id
 }
 
 type Cars struct{
-	_id bson.ObjectId 		`json:"id" bson:"_id"`
+	//car_id bson.ObjectId 	`json:"id" bson:"_id"`
+	Id bson.ObjectId 		`json:"id" bson:"_id,omitempty"`
 	Model string			`json:"model" bson:"model"`
 	Age int 				`json:"age" bson:"age"`
 	Price int				`json:"price" bson:"price"`
@@ -34,7 +31,7 @@ func init() {
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
-	db = session.DB("collection")
+	db = session.DB("crudmongo" )
 }
 
 func collectionPerson() *mgo.Collection {
@@ -66,21 +63,37 @@ func GetAllCars()([]Cars, error){
 }
 
 //// GetOne returns a single item from the database.
-func GetOne(id string) (*People, error) {
-	res := People{}
+func GetOneCar(id string) (*Cars, error) {
+	res := Cars{}
 
-	if err := collectionPerson().Find(bson.M{"_id": id}).One(&res); err != nil {
+	if err := collectionCars().FindId(bson.ObjectIdHex(id)).One(&res); err != nil {
 		return nil, err
 	}
 	return &res, nil
 }
-//
-//// Save inserts an item to the database.
-//func Save(item People) error {
-//	return collectionItems().Insert(item)
-//}
-//
-//// Remove deletes an item from the database
-//func Remove(id string) error {
-//	return collectionItems().Remove(bson.M{"_id": id})
-//}
+
+func GetOnePerson(id string) (*People, error) {
+	res := People{}
+	//err := peopleColl.FindId(bson.ObjectIdHex(id)).One(&person)
+	fmt.Println(id)
+
+	if err := collectionPerson().FindId(bson.ObjectIdHex(id)).One(&res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Save inserts an item to the database.
+func CreateCar(item Cars) error {
+	return collectionCars().Insert(item)
+}
+
+// Remove deletes an item from the database
+func RemovePerson(id string) error {
+	return collectionPerson().Remove(bson.M{"_id": bson.ObjectIdHex(id)})
+}
+
+func RemoveCar(id string) error {
+	return collectionCars().Remove(bson.M{"_id": bson.ObjectIdHex(id)})
+}
