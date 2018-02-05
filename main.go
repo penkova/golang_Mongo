@@ -4,7 +4,6 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"github.com/user/cars_crudMongo/api"
-	//"gopkg.in/mgo.v2/bson"
 )
 
 func main() {
