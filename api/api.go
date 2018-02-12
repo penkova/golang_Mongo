@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/user/cars_crudMongo/db"
+	"github.com/user/cars_crud_mongo/db"
 	"gopkg.in/mgo.v2/bson"
 )
 

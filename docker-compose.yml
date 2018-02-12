@@ -1,0 +1,44 @@
+#version: "3.3"
+#
+#services:
+#    mongodb:
+#      image: mongo
+#      networks:
+#       - myapp
+##      ports:
+##        - "27017:27017"
+#
+#      volumes:
+#       - db_mongo:/data/db
+#
+#    app:
+#          image: cars_crud_mongo
+#          ports:
+#            - "8081:8080"
+#          networks:
+#           - myapp
+#
+#
+#volumes:
+#    db_mongo:
+#networks:
+#  myapp:
+#    driver: bridge
+
+
+version: "3.3"
+
+services:
+    mongodb:
+      image: mongo
+      expose:
+        - "27017"
+      volumes:
+       - db_mongo:/data/db
+
+    app:
+        image: cars_crud_mongo
+        ports:
+           - "8081:8080"
+volumes:
+    db_mongo:

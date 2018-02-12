@@ -6,6 +6,7 @@ import (
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"time"
 )
 
 type People struct {
@@ -27,7 +28,9 @@ type Cars struct {
 var db *mgo.Database
 
 func init() {
-	session, err := mgo.Dial("localhost:27018")
+	time.Sleep(1500 * time.Millisecond)
+	//session, err := mgo.Dial("localhost:27017")
+	session, err := mgo.Dial("mongodb:27017")
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
@@ -37,7 +40,6 @@ func init() {
 func collectionPerson() *mgo.Collection {
 	return db.C("peopledb")
 }
-
 func collectionCars() *mgo.Collection {
 	return db.C("carsdb")
 }

@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"net/http"
-	"github.com/user/cars_crudMongo/api"
+	"github.com/user/cars_crud_mongo/api"
 )
 
 func main() {
@@ -21,5 +21,5 @@ func main() {
 	r.HandleFunc("/cars/{id}", api.UpdateCar).Methods("PUT")
 	r.HandleFunc("/cars/{id}", api.DeleteCar).Methods("DELETE")
 
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(":8080", r)
 }
